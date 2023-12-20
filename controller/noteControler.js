@@ -12,14 +12,14 @@ export const getNotes = async(req,res)=>{
     } catch (error) {
         res.status(400).json({
             success: false,
-            error
+            error:"sani"
           });
     }
 }
 export const getNote = async(req,res)=>{
     try {
         const {id}=req.params
-        const note = await Notes.findById({ _id : id})
+        const note = await Notes.findById(id)
         
         res.status(200).json({
         success: true,
