@@ -5,7 +5,7 @@ const routing = express.Router()
 
 routing
   .post('/reg' , createUser)
-  .get('/login' , loginUser)
+  .post('/login' , loginUser)
   .get('/logout' , isAuthenticate , logout)
   .get('/' , isAuthenticate, allUser)
   .get('/:id' , getUser)
