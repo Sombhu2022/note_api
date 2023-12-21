@@ -4,7 +4,8 @@ export const sendCookic = (user , res , message , statusCode = 200)=>{
     const token = jwt.sign({ _id: user._id } , process.env.JWT_SECRET);
     res.status(statusCode)
        .cookie("token" , token , {
-        maxAge: 10 * 60 * 60 * 1000 , //10 days
+       expires: new Date(Date.now() + 3600000),
+       httpOnly: true, // Prevent JavaScript access for security
        })
        .json({
         success:true,
