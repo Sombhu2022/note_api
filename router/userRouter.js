@@ -7,8 +7,8 @@ routing
   .post('/reg' , createUser)
   .post('/login' , loginUser)
   .get('/logout'  , logout)
-  .get('/' ,  allUser)
-  .get('/:id' , getUser)
-  .delete('/:id' , deleteUser)
+  .get('/' , isAuthenticate,  allUser)
+  .get('/:id' ,isAuthenticate, getUser)
+  .delete('/:id' , isAuthenticate, deleteUser)
 
 export default routing
