@@ -11,7 +11,8 @@ import routing from './router/userRouter.js'
 
 database();
 server.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000/" ,
+
+   origin: [ process.env.FRONTEND_URL , "http://localhost:3000" ] ,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
 
