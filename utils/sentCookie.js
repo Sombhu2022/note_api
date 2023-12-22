@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 
-  export const sendCookic = (user, res, message, statusCode = 200) => {
+
+export const sendCookic = (user, res, message, statusCode = 200) => {
+
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
@@ -9,7 +11,9 @@ import jwt from "jsonwebtoken";
     .cookie("token",token , {
       expires: new Date(Date.now() + 3600000), // Set expiration time
       httpOnly: true,
+
       secure:true,
+
     })
     .json({
       success: true,
@@ -26,3 +30,4 @@ import jwt from "jsonwebtoken";
 //   path: '/', // Accessible from all paths
 //   expires: new Date(Date.now() + 3600000), // Set expiration time
 // });
+
