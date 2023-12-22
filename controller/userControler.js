@@ -7,7 +7,7 @@ export const createUser = async (req, res) => {
       const {name , email , password , dp} = req.body;
       
       let user =await  Users.findOne({email})
-      if(user) return res.json({message:"email alrady exist"})
+      if(user) return res.status(400).json({message:"email alrady exist"})
       
     const hashPassword =await bcrypt.hash(password , 10); //genarate hash password for encription password ..
    
@@ -108,8 +108,9 @@ export const logout = (req, res) => {
   try {
       res
           .status(200)
-          .cookie("token", "", {
+          .cookie("token", "" , {
               expires: new Date(Date.now()),
+              httpOnly: true,
           })
           .json({
               success: true,

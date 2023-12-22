@@ -4,11 +4,11 @@ import { isAuthenticate } from '../middlewares/userAuthentication.js'
 const routing = express.Router()
 
 routing
-  .post('/' , createUser)
-  .get('/login' , loginUser)
+  .post('/reg' , createUser)
+  .post('/login' , loginUser)
   .get('/logout' , isAuthenticate , logout)
-  .get('/' , isAuthenticate, allUser)
+  .get('/alluser' , isAuthenticate, allUser)
   .get('/:id' , getUser)
   .delete('/:id' , deleteUser)
-
+  
 export default routing
