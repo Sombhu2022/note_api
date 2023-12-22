@@ -13,7 +13,7 @@ export const createUser = async (req, res) => {
    
     user = await Users.create({name , email , password:hashPassword , dp});
 
-    sendCookic(user , res , "user created successfully" , 201);
+    sendCookic(user , res , "user created successfully" , 200);
    
 
   } catch (error) {
@@ -38,7 +38,7 @@ export const loginUser =async (req , res)=>{
 
         if(!isMatch) return res.status(400).json({message:"email or password not match"})
 
-        sendCookic(user , res , "user logoin successfully" , 201);
+        sendCookic(user , res , "user logoin successfully" , 200);
 
         
     } catch (error) {
