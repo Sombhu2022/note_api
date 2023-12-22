@@ -7,6 +7,11 @@ const noteModel =new mongoose.Schema({
         required:true,
         max:1000
     },
+    subject:{
+       type:String,
+       required:true,
+       max:200
+    },
     postAt:{
          type:Date,
          default:Date.now()

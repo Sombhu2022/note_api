@@ -1,60 +1,65 @@
 import { Notes } from "../models/noteModel.js";
 
+export const getNotes = async (req, res) => {
+  try {
+    const note = await Notes.find({});
+    res.status(200).json({
+      success: true,
+      note,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error,
+    });
+  }
+};
+export const getNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const note = await Notes.findById(id);
 
-export const getNotes = async(req,res)=>{
-    try {
-        const note = await Notes.find({})
-        res.status(200).json({
-        success: true,
-        note
-      });
-      
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            error:error
-          });
-    }
-}
-export const getNote = async(req,res)=>{
-    try {
-        const {id}=req.params
-        const note = await Notes.findById(id)
-        
-        res.status(200).json({
-        success: true,
-        note
-      });
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            error
-          });
-    }
-}
-export const updateNote = async(req,res)=>{
-    try {
-        const {id}=req.params
-        const data = req.body
-        const note = await Notes.findByIdAndUpdate({_id:id} ,data , {new:true} )
-        
-        res.status(200).json({
-        success: true,
-        note
-      });
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            error
-          });
-    }
-}
+    res.status(200).json({
+      success: true,
+      note,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error,
+    });
+  }
+};
+
+
+export const updateNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const note = await Notes.findByIdAndUpdate({ _id: id }, data, {
+      new: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      note,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error,
+    });
+  }
+};
+
+
 export const addNote = async (req, res) => {
   try {
-    const { note } = req.body;
- 
+    const { note, subject } = req.body;
+   console.log(note ,subject)
     await Notes.create({
       note,
+      subject,
     });
 
     res.status(200).json({
@@ -69,22 +74,19 @@ export const addNote = async (req, res) => {
   }
 };
 
-export const deletNote= async (req,res)=>{
-    try {
-        const {id} = req.params
-       
-        await Notes.findByIdAndDelete({_id:id})
-        res.status(200).json({
-            success: true,
-            message: "delete note",
-        })
-        
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: "somthing else , try again",
-        })
-       
-      
-    }
-}
+export const deletNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Notes.findByIdAndDelete({ _id: id });
+    res.status(200).json({
+      success: true,
+      message: "delete note",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "somthing else , try again",
+    });
+  }
+};

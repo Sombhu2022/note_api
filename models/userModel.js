@@ -15,15 +15,10 @@ const user = new  mongoose.Schema({
         type:String,
         required:true ,
     },
-    dp:{
-       type:String,
-       max:700, 
-    },
     postAt:{
         type:Date,
         default:Date.now()
-   },
-  token:String
+   }
 
 })
 
