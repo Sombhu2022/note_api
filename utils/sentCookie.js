@@ -4,16 +4,15 @@ import jwt from "jsonwebtoken";
 export const sendCookic = (user, res, message, statusCode = 200) => {
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "30d",
   });
   res
     .status(statusCode)
     .cookie("token",token , {
-      expires: new Date(Date.now() + 3600000), // Set expiration time
+      expires: new Date(Date.now() + 30*24*60*60), // Set expiration time
       httpOnly: true,
       sameSite: "None",
       secure:true,
-
     })
     .json({
       success: true,

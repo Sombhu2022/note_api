@@ -1,6 +1,6 @@
 import express from 'express'
 import { allUser, createUser, deleteUser, getUser, loginUser, logout } from '../controller/userControler.js'
-import { isAuthenticate } from '../middlewares/userAuthentication.js'
+import { isAuthenticate } from '../middlewares/isAuthenticate.js'
 const routing = express.Router()
 
 routing

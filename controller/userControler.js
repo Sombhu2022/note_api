@@ -1,5 +1,5 @@
 import { Users } from "../models/userModel.js";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 import { sendCookic } from "../utils/sentCookie.js";
 
 export const createUser = async (req, res) => {
@@ -13,7 +13,7 @@ export const createUser = async (req, res) => {
    
     user = await Users.create({name , email , password:hashPassword , dp});
 
-    sendCookic(user , res , "user created successfully" , 200);
+    sendCookic(user , res , "user created successfully" , 201);
    
 
   } catch (error) {
@@ -21,10 +21,9 @@ export const createUser = async (req, res) => {
       message: "somthing error",
       error,
     });
-    console.log(error)
+    console.log(error);
   }
 };
-
 
 export const loginUser =async (req , res)=>{
    
@@ -38,7 +37,7 @@ export const loginUser =async (req , res)=>{
 
         if(!isMatch) return res.status(400).json({message:"email or password not match"})
 
-        sendCookic(user , res , "user logoin successfully" , 200);
+        sendCookic(user , res , "user logoin successfully" , 201);
 
         
     } catch (error) {
@@ -57,62 +56,57 @@ export const loginUser =async (req , res)=>{
 
 export const allUser = async (req, res) => {
   try {
-    const user =await Users.find({});
+    const user = await Users.find({});
     res.status(200).json({
       message: "all users",
-      user
+      user,
     });
   } catch (error) {
     res.status(400).json({
       message: "somthing error",
-      error
+      error,
     });
   }
 };
 
-
 export const getUser = async (req, res) => {
   try {
-    const {id}= req.params
-    const user =await Users.findById({_id:id});
+    const { id } = req.params;
+    const user = await Users.findById({ _id: id });
     res.status(200).json({
       message: "user fetched",
-      user
+      user,
     });
   } catch (error) {
     res.status(400).json({
       message: "somthing error",
-      error
+      error,
     });
   }
 };
 
 export const deleteUser = async (req, res) => {
   try {
-    const {id}= req.params
-    await Users.findByIdAndDelete({_id:id});
+    const { id } = req.params;
+    await Users.findByIdAndDelete({ _id: id });
     res.status(200).json({
       message: "user deleted",
     });
   } catch (error) {
     res.status(400).json({
       message: "somthing error",
-      error
+      error,
     });
   }
 };
 
-
 export const logout = (req, res) => {
-
   try {
       res
           .status(200)
           .cookie("token", "" , {
               expires: new Date(Date.now()),
               httpOnly: true,
-              sameSite: "None",
-              secure:true,
           })
           .json({
               success: true,
@@ -120,9 +114,9 @@ export const logout = (req, res) => {
           });
 
   } catch (error) {
-      res.json({
-          success: false,
-          message: error,
-      });
+    res.json({
+      success: false,
+      message: error,
+    });
   }
 }
