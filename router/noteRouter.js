@@ -4,7 +4,7 @@ import { isAuthenticate } from '../middlewares/userAuthentication.js'
 const router = exprees.Router()
 
 router
-  .get('/' , getNotes)
+  .get('/' , isAuthenticate, getNotes)
   .get('/:id' , getNote)
   .post('/',addNote)
   .delete('/:id' ,deletNote)
