@@ -1,6 +1,6 @@
 import exprees from 'express'
 import { addNote, deletNote, getNote, getNotes, updateNote } from '../controller/noteControler.js'
-
+import { isAuthenticate } from '../middlewares/userAuthentication.js'
 const router = exprees.Router()
 
 router
