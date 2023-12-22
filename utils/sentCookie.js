@@ -11,6 +11,7 @@ export const sendCookic = (user, res, message, statusCode = 200) => {
       expires: new Date(Date.now() + 3600000), // Set expiration time
       httpOnly: true,
       path: '/',
+      secure: true,
     })
     .json({
       success: true,
