@@ -4,16 +4,18 @@ import { sendCookic } from "../utils/sentCookie.js";
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+      const {name , email , password , dp} = req.body;
+      
+      let user =await  Users.findOne({email})
+      if(user) return res.status(400).json({message:"email alrady exist"})
+      
+    const hashPassword =await bcrypt.hash(password , 10); //genarate hash password for encription password ..
+   
+    user = await Users.create({name , email , password:hashPassword , dp});
 
-    let user = await Users.findOne({ email });
-    if (user) return res.status(400).json({ message: "email alrady exist" });
+    sendCookic(user , res , "user created successfully" , 201);
+   
 
-    const hashPassword = await bcrypt.hash(password, 10); //genarate hash password for encription password ..
-
-    user = await Users.create({ name, email, password: hashPassword });
-
-    sendCookic(user, res, "user created successfully", 201);
   } catch (error) {
     res.status(400).json({
       message: "somthing error",
@@ -23,27 +25,34 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await Users.findOne({ email });
+export const loginUser =async (req , res)=>{
+   
+    try {
+        const {email , password } = req.body
+        const user = await Users.findOne({email})
+        
+        if(!user) return res.status(400).json({message:"email or password not match"})
 
-    if (!user)
-      return res.status(400).json({ message: "email or password not match" });
+        const isMatch = await bcrypt.compare(password , user.password)
 
-    const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) return res.status(400).json({message:"email or password not match"})
 
-    if (!isMatch)
-      return res.status(400).json({ message: "email or password not match" });
+        sendCookic(user , res , "user logoin successfully" , 201);
 
-    sendCookic(user, res, "user logoin successfully", 201);
-  } catch (error) {
-    res.status(400).json({
-      message: "somthing wrong!  user not login",
-      error,
-    });
-  }
-};
+        
+    } catch (error) {
+
+        res.status(400).json({
+            message:"somthing wrong!  user not login",
+            error
+        })
+        
+    }
+
+
+}
+
+
 
 export const allUser = async (req, res) => {
   try {
@@ -93,22 +102,21 @@ export const deleteUser = async (req, res) => {
 
 export const logout = (req, res) => {
   try {
-    res
-      .status(200)
-      .cookie("token", "", {
-        expires: new Date(Date.now()),
-        httpOnly: true,
-        secure:true,
-        sameSite: 'None',
-      })
-      .json({
-        success: true,
-        message: "Logout successfull",
-      });
+      res
+          .status(200)
+          .cookie("token", "" , {
+              expires: new Date(Date.now()),
+              httpOnly: true,
+          })
+          .json({
+              success: true,
+              message: "Logout successfull",
+          });
+
   } catch (error) {
     res.json({
       success: false,
       message: error,
     });
   }
-};
+}
