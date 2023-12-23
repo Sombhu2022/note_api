@@ -2,16 +2,12 @@ import { Notes } from "../models/noteModel.js";
 
 export const getNotes = async (req, res) => {
   try {
-    const {email}=req.user
-    // if(!email) return res.status(400).json{
-    //   success:false,
-    //   message:'first login'
-    // }
+    const {email , name , id}=req.user
     const note = await Notes.find({user:email});
     res.status(200).json({
       success: true,
       note,
-
+      user:{name , id}
     });
   } catch (error) {
     res.status(400).json({
