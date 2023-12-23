@@ -88,7 +88,7 @@ export const getUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    await Users.findByIdAndDelete({ _id: id });
+    const user =await Users.findByIdAndDelete({ _id: id });
     res.status(200).json({
       message: "user deleted",
     });
@@ -107,8 +107,6 @@ export const logout = (req, res) => {
           .cookie("token", "" , {
               expires: new Date(Date.now()),
               httpOnly: true,
-             sameSite: "None",
-             secure:true,
           })
           .json({
               success: true,
