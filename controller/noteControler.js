@@ -2,10 +2,16 @@ import { Notes } from "../models/noteModel.js";
 
 export const getNotes = async (req, res) => {
   try {
-    const note = await Notes.find({});
+    const {email}=req.user
+    // if(!email) return res.status(400).json{
+    //   success:false,
+    //   message:'first login'
+    // }
+    const note = await Notes.find({user:email});
     res.status(200).json({
       success: true,
       note,
+
     });
   } catch (error) {
     res.status(400).json({
@@ -35,14 +41,20 @@ export const getNote = async (req, res) => {
 export const updateNote = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = req.body;
-    const note = await Notes.findByIdAndUpdate({ _id: id }, data, {
+    const {note , subject} = req.body;
+    const {email}=req.user
+
+    const data = await Notes.findByIdAndUpdate({ _id: id }, {
+         note,
+         subject,
+         user:email,
+    } , {
       new: true,
     });
 
     res.status(200).json({
       success: true,
-      note,
+      data,
     });
   } catch (error) {
     res.status(400).json({
@@ -56,10 +68,13 @@ export const updateNote = async (req, res) => {
 export const addNote = async (req, res) => {
   try {
     const { note, subject } = req.body;
+    const {email}=req.user
+    console.log(email)
    console.log(note ,subject)
     await Notes.create({
       note,
       subject,
+      user:email,
     });
 
     res.status(200).json({

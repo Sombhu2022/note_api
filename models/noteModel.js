@@ -12,6 +12,10 @@ const noteModel =new mongoose.Schema({
        required:true,
        max:200
     },
+    user:{
+      type:String ,
+      required:true
+    },
     postAt:{
          type:Date,
          default:Date.now()
