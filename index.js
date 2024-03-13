@@ -1,34 +1,58 @@
-import express from 'express'
-const server = express()
-import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
-import 'dotenv/config'
-import { database } from './db/dbConnection.js'
-import router from './router/noteRouter.js';
-import cors from 'cors'
-import routing from './router/userRouter.js'
+
+import express from "express"
+import "dotenv/config"
+
+import bodyParser from "body-parser"
+import fileUpload from 'express-fileupload';
+import cookieParser from "cookie-parser";
+
+import cors from "cors"
+import { v2 as cloudinary } from 'cloudinary';
+
+import noteRouter from './router/noteRouter.js'
+import userRouter from './router/userRouter.js'
+
+import {database} from './db/dbConnection.js'
 
 
-database();
-server.use(cors({
+export const app = express()
 
-    origin: [process.env.FRONTEND_URL , 'http://localhost:3000'],
+app.use(bodyParser.json({limit:"50mb"}))
+app.use(express.json({ limit: '50mb' }))
+
+// Increase the request size limit for URL-encoded data
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+app.use(fileUpload(
+    {
+     limits: { fileSize: 50 * 1024 * 1024 }, // 100 MB (adjust this as needed)
+    }
+))
+app.use(cookieParser())
+
+
+app.use(cors({
+    origin: `${process.env.FRONTEND_URL}`,
     exposedHeaders: ['X-Total-Count'],
-
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-
-}))
-
-server.use(cookieParser())
-server.use(bodyParser.json())
-server.use(express.json())
-server.use('/note',router)
-server.use('/user', routing )
+}
+))
 
 
-
-server.listen(process.env.PORT,()=>{
-    console.log(`8080 is a port`)
-
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_DB,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
 })
+ 
+database();
+
+app.use('/note',noteRouter)
+app.use('/user', userRouter)
+
+
+app.listen(process.env.PORT, () => {
+    console.log(`port :- http://localhost:${process.env.PORT}/`)
+
+});
