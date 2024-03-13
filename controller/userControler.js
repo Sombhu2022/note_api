@@ -1,28 +1,38 @@
 import { Users } from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import { sendCookic } from "../utils/sentCookie.js";
+import { sendCookic } from "../utils/sentCookic.js";
+import { sendEmail } from "../utils/sendMail.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const createUser = async (req, res) => {
   try {
-      const {name , email , password , dp} = req.body;
-      
-      let user =await  Users.findOne({email})
-      if(user) return res.status(400).json({message:"email alrady exist"})
-      
-    const hashPassword =await bcrypt.hash(password , 10); //genarate hash password for encription password ..
-   
-    user = await Users.create({name , email , password:hashPassword , dp});
+    const { name, password, email, dp } = req.body
 
-    sendCookic(user , res , "user created successfully" , 201);
-   
+    let user = await Users.findOne({ email })
+    if (user){
+        console.log("user exist");
+     return res.status(400).json({ message: "email alrady exist" })
+    }
 
-  } catch (error) {
+    const hashPassword = await bcrypt.hash(password, 10);
+    const profilePic = await cloudinary.uploader.upload(dp , {
+        folder:"notebook"
+    })
+    const image = {
+        url:profilePic.secure_url,
+        image_id:profilePic.public_id,
+    }
+    user = await Users.create({ name, email, password: hashPassword , dp:image })
+    sendCookic(user, res, "user created", 200)
+    sendEmail(user.email, `wellcome ${user.name}`, "wellcome to cloude notebook , upload your importent note or files..")
+} catch (error) {
     res.status(400).json({
-      message: "somthing error",
-      error,
-    });
-    console.log(error);
-  }
+        message: "user not create",
+        success: false,
+        error
+    })
+
+}
 };
 
 export const loginUser =async (req , res)=>{

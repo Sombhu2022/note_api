@@ -18,6 +18,7 @@ export const sendCookic = (user, res, message, statusCode = 200) => {
       success: true,
       message,
       token: token,
+      user:user
     });
 };
 
