@@ -22,10 +22,6 @@ const userModel = new mongoose.Schema({
         },
 
     },
-    roal:{
-        type:String,
-        default:"user"
-    },
     password:{
         type:String,
         minLength:[8 , "password must be 8 charecter or above"],

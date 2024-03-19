@@ -2,19 +2,27 @@
 import mongoose from 'mongoose'
 
 const noteModel =new mongoose.Schema({
-    note:{
+    subject:{
         type:String,
         required:true,
         max:1000
     },
-    subject:{
+    title:{
        type:String,
        required:true,
        max:200
     },
     user:{
-      type:String ,
+      type:mongoose.Schema.Types.ObjectId ,
       required:true
+    },
+    image:  {
+      url: {
+          type: String,
+      },
+      image_id: {
+          type: String,
+      },
     },
     postAt:{
          type:Date,

@@ -15,6 +15,7 @@ export const createUser = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+
     const profilePic = await cloudinary.uploader.upload(dp , {
         folder:"notebook"
     })
@@ -35,15 +36,18 @@ export const createUser = async (req, res) => {
 }
 };
 
+
 export const loginUser =async (req , res)=>{
-   
+      // console.log("login page")
     try {
         const {email , password } = req.body
-        const user = await Users.findOne({email})
+        const user = await Users.findOne({email}).select("+password").exec()
         
         if(!user) return res.status(400).json({message:"email or password not match"})
+        // console.log("login user", password , user.password);
+      
 
-        const isMatch = await bcrypt.compare(password , user.password)
+        const isMatch = await bcrypt.compare(password , user.password) 
 
         if(!isMatch) return res.status(400).json({message:"email or password not match"})
 
@@ -81,7 +85,7 @@ export const allUser = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     const user = await Users.findById({ _id: id });
     res.status(200).json({
       message: "user fetched",
@@ -110,20 +114,23 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => {
+export const logout =async (req, res) => {
   try {
+    
+    const {id} = req.user
+    console.log(req.user);
       res
           .status(200)
-          .cookie("token", "" , {
-              expires: new Date(Date.now()),
-              httpOnly: true,
-             sameSite: "None",
-             secure:true,
-          })
           .json({
-              success: true,
-              message: "Logout successfull",
+            success: true,
+            message: "Logout successfull",
           });
+          // .cookie("token", "" , {
+          //     expires: new Date(Date.now()),
+          //     httpOnly: true,
+          //    sameSite: "None",
+          //    secure:true,
+          // })
 
   } catch (error) {
     res.json({

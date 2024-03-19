@@ -1,14 +1,21 @@
 import { Notes } from "../models/noteModel.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const getNotes = async (req, res) => {
   try {
-    const {email , name , id}=req.user
-    const note = await Notes.find({user:email});
+    const {id}=req.user
+    console.log(id);
+
+    const note = await Notes.find({user:id}).populate("user");
+
+    if(!note) return res.status(200).json("no data are here.")
+
+    console.log(note);
     res.status(200).json({
       success: true,
       note,
-      user:{name , id}
     });
+
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -16,6 +23,8 @@ export const getNotes = async (req, res) => {
     });
   }
 };
+
+
 export const getNote = async (req, res) => {
   try {
     const { id } = req.params;
@@ -63,20 +72,50 @@ export const updateNote = async (req, res) => {
 
 export const addNote = async (req, res) => {
   try {
-    const { note, subject } = req.body;
-    const {email}=req.user
-    console.log(email)
-   console.log(note ,subject)
-    await Notes.create({
-      note,
-      subject,
-      user:email,
-    });
+    const { title , subject , image } = req.body;
+    const { id }=req.user
+    // console.log(id , req.body)
 
-    res.status(200).json({
+    let data ; 
+
+    if(image !== 'null'){
+      // console.log("if");
+      const profilePic = await cloudinary.uploader.upload(image , {
+        folder:"notebook"
+    })
+    // console.log(profilePic);
+    const TempImage = {
+        url:profilePic.secure_url,
+        image_id:profilePic.public_id,
+    }
+    // console.log(title ,subject)
+    data = await Notes.create({
+      title,
+      subject,
+      user:id,
+      image:TempImage
+    });
+  }
+  
+  else{
+    // console.log("else");
+    data = await Notes.create({
+      title,
+      subject,
+      user:id,
+    });
+   console.log(data);
+   
+  }
+
+  const note = await data.populate('user')
+  res.status(200).json({
+      note , 
       success: true,
       message: "add note",
     });
+
+
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -84,6 +123,7 @@ export const addNote = async (req, res) => {
     });
   }
 };
+
 
 export const deletNote = async (req, res) => {
   try {

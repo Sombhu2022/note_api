@@ -8,7 +8,7 @@ const router = exprees.Router()
 router
   .get('/' , isAuthenticate , getNotes)
   .get('/:id' , isAuthenticate, getNote)
-  .post('/',isAuthenticate, addNote)
+  .post('/', isAuthenticate ,  addNote)
   .delete('/:id' ,isAuthenticate , deletNote)
   .patch('/:id' , isAuthenticate, updateNote)
 
