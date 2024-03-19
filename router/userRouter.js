@@ -6,9 +6,9 @@ const routing = express.Router()
 routing
   .post('/reg' , createUser)
   .post('/login' , loginUser)
-  .get('/logout'  , logout)
+  .get('/logout' , isAuthenticate , logout)
   .get('/alluser' , isAuthenticate, allUser)
-  .get('/:id' , isAuthenticate, getUser)
+  .get('/' , isAuthenticate, getUser)
   .delete('/:id' ,isAuthenticate, deleteUser)
   
 export default routing
