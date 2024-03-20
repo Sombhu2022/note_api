@@ -45,14 +45,13 @@ export const getNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   try {
-    const { id } = req.params;
+
     const {note , subject} = req.body;
-    const {email}=req.user
+    const {id}=req.user
 
     const data = await Notes.findByIdAndUpdate({ _id: id }, {
          note,
          subject,
-         user:email,
     } , {
       new: true,
     });
