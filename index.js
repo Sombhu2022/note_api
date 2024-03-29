@@ -48,7 +48,7 @@ cloudinary.config({
  
 database();
 
-app.use('/' , (req , res)=>{
+app.get('/' , (req , res)=>{
   res.send("This is note api")
 })
 app.use('/note',noteRouter)
