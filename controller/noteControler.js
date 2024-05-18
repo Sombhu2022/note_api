@@ -92,6 +92,7 @@ const job = CronJob.from({
 	cronTime: cronTime,
 	onTick: function () {
 		sendEmail(req?.user?.email , 'hii sombhu vai' , 'hii vai kese ho')
+		console.log("corn is working")
 	},
 	start: true,
 	timeZone: 'system'
