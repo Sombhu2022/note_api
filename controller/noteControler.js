@@ -1,5 +1,8 @@
 import { Notes } from "../models/noteModel.js";
 import { v2 as cloudinary } from 'cloudinary';
+import { CronJob } from 'cron';
+import { sendEmail } from "../utils/sendMail.js";
+
 
 export const getNotes = async (req, res) => {
   try {
@@ -74,9 +77,26 @@ export const updateNote = async (req, res) => {
 
 export const addNote = async (req, res) => {
   try {
-    const { title , subject , image } = req.body;
+    const { title , subject , image , noticeTime } = req.body;
     const { id }=req.user
     // console.log(id , req.body)
+    const date = noticeTime.split(/[-T:]/)
+    const cronTime = `${date[4]} ${date[3]} ${date[2]} ${date[1]} *`
+    console.log(cronTime);
+    // from checking ....
+// import { CronJob } from 'cron';
+
+// equivalent job using the "from" static method, providing parameters as an object
+// const 
+const job = CronJob.from({
+	cronTime: cronTime,
+	onTick: function () {
+		sendEmail(req?.user?.email , 'hii sombhu vai' , 'hii vai kese ho')
+	},
+	start: true,
+	timeZone: 'system'
+});
+
 
     let TempImage ; 
 
