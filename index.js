@@ -15,6 +15,9 @@ import userRouter from './router/userRouter.js'
 import {database} from './db/dbConnection.js'
 
 
+import Agenda from "agenda";
+import { sendEmail } from "./utils/sendMail.js";
+
 export const app = express()
 
 app.use(bodyParser.json({limit:"50mb"}))
@@ -29,6 +32,41 @@ app.use(fileUpload(
     }
 ))
 app.use(cookieParser())
+
+// job sheduling...
+
+const mongoConnectionString = process.env.AGENDA_DB_URL;
+// const mongoConnectionString = "mongodb://127.0.0.1:27017/agenda";
+
+
+console.log(mongoConnectionString);
+export const agenda = new Agenda({
+    db: { address: mongoConnectionString , collection: 'Jobs' },
+    //   processEvery: '30 seconds',
+      options: { useNewUrlParser: true }
+});
+
+agenda.on('ready', async() => {
+    console.log('Agenda started!');
+    await agenda.start();
+});
+
+agenda.on('error', (error) => {
+    console.error('Agenda connection error:', error);
+});
+
+
+agenda.define('send email', async (job) => {
+    const { to, subject, body , sendAt } = job.attrs.data;
+    sendEmail(to , subject , `${body}  ${sendAt} `)
+    console.log(sendAt);
+  });
+
+//  console.log("url",process.env.DB_URL);
+
+
+
+
 
 
 app.use(cors({
@@ -47,6 +85,10 @@ cloudinary.config({
 })
  
 database();
+
+// (async function() {
+//     await agenda.start().then((res)=>{console.log(res);}).catch((err)=>{console.log(err);});
+//   })();
 
 app.get('/' , (req , res)=>{
   res.send("This is note api")

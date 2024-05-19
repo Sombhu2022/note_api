@@ -24,6 +24,9 @@ const noteModel =new mongoose.Schema({
           type: String,
       },
     },
+    emailSendAt:{
+      type:String
+    },
     postAt:{
          type:Date,
          default:Date.now()

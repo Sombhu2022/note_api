@@ -24,7 +24,7 @@ export const sendCookic = (user, res, message, statusCode = 200) => {
       // })
       
     } catch (error) {
-      console.log(error);
+      console.log("this error",error);
     }
     
   };

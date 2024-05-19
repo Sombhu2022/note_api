@@ -2,10 +2,12 @@ import jwt from "jsonwebtoken";
 import { Users } from "../models/userModel.js";
 
 export const isAuthenticate = async (req, res, next) => {
-  
+  console.log("isAuthenticate");
+  const token = req.headers.token;
+  console.log(token);
   try {
-    const token = req.headers.token;
     if(!token) {
+      console.log("token is not present");
       return res.status(400).json({
         success:false,
         message: "login first",
