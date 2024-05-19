@@ -2,6 +2,7 @@ import { Notes } from "../models/noteModel.js";
 import { v2 as cloudinary } from 'cloudinary';
 import { CronJob } from 'cron';
 import { sendEmail } from "../utils/sendMail.js";
+import { agenda } from "../config/agendaConfig.js";
 // import { agenda } from "../index.js";
 
 
@@ -137,11 +138,11 @@ export const addNote = async (req, res) => {
     });
 
 
-    // const scheduleEmail =async({to , subject ,body , sendAt})=>{
-    //   await agenda.schedule(sendAt ,'send email', {to , subject , body , sendAt})
-    // }
+    const scheduleEmail =async({to , subject ,body , sendAt})=>{
+      await agenda.schedule(sendAt ,'send email', {to , subject , body , sendAt})
+    }
  
-    // scheduleEmail({ to:req?.user?.email , subject:`We are reminding you :- ${title}` , body: `Hii ${req?.user?.name}, Do you remember this ...  \n ${subject} `, sendAt:noticeTime} )
+    scheduleEmail({ to:req?.user?.email , subject:`We are reminding you :- ${title}` , body: `Hii ${req?.user?.name}, Do you remember this ...  \n ${subject} `, sendAt:noticeTime} )
   
   
   const note = await data.populate('user')
