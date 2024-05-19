@@ -93,6 +93,7 @@ export const addNote = async (req, res) => {
 
 // equivalent job using the "from" static method, providing parameters as an object
 // const 
+
 // const job = CronJob.from({
 // 	cronTime: cronTime,
 // 	onTick: function () {
@@ -102,6 +103,7 @@ export const addNote = async (req, res) => {
 // 	start: true,
 // 	timeZone: 'system'
 // });
+
 
 
     let TempImage ; 
