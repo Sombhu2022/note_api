@@ -25,7 +25,7 @@ agenda.on('error', (error) => {
 agenda.define('send email', async (job) => {
     const { to, subject, body , sendAt } = job.attrs.data;
     sendEmail(to , subject , `${body}  ${sendAt} `)
-    console.log('Mail send at',sendAt);
+    console.log('Mail send at time',sendAt);
   });
 
  console.log("url",process.env.DB_URL);
