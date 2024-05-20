@@ -66,7 +66,7 @@ app.get('/' , (req , res)=>{
 app.use('/note',noteRouter)
 app.use('/user', userRouter)
 
-
+console.log(process.env.FRONTEND_URL);
 app.listen(process.env.PORT, () => {
     console.log(`port :- http://localhost:${process.env.PORT}/`)
 
