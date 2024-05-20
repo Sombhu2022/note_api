@@ -56,9 +56,6 @@ cloudinary.config({
  
 database();
 
-// (async function() {
-//     await agenda.start().then((res)=>{console.log(res);}).catch((err)=>{console.log(err);});
-//   })();
 
 app.get('/' , (req , res)=>{
   res.send("This is note api")
