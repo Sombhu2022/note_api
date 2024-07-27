@@ -40,7 +40,7 @@ app.use(cookieParser())
 agendaConnection();
 
 app.use(cors({
-    origin: `${process.env.FRONTEND_URL}`,
+    origin: `${process.env.FRONTEND_URL}` || "*" ,
     exposedHeaders: ['X-Total-Count'],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
