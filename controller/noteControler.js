@@ -49,15 +49,69 @@ export const getNote = async (req, res) => {
 };
 
 
+export const updateImage = async(req , res) =>{
+
+   const { newImage} = req.body;
+   const {id } = req.params;
+  console.log(newImage , id);
+   let TempImage={}
+   try {
+    
+    if(newImage !== 'null'){
+ 
+      const profilePic = await cloudinary.uploader.upload(newImage , {
+        folder:"notebook"
+    })
+    // console.log(profilePic);
+     TempImage = {
+        url:profilePic.secure_url,
+        image_id:profilePic.public_id,
+    }}
+  else{
+
+    TempImage = {
+      url:'',
+      image_id:'',
+  }
+
+}
+
+await Notes.findByIdAndUpdate({ _id: id }, {
+  image:TempImage
+} , {
+new: true,
+});
+
+console.log("ok");
+
+ res.json({
+  message:"all ok , image updated",
+  success:true
+ }).status(200)
+
+
+    }
+catch (error) {
+  console.log(error);
+  
+  res.status(400).json({
+    success: false,
+    message: "Can't add note",
+    error
+  });
+}
+}
+
 export const updateNote = async (req, res) => {
   try {
 
-    const {title , subject} = req.body;
+    const {title , subject , dateTime } = req.body;
     const {id}=req.params
     // console.log(title , subject);
     await Notes.findByIdAndUpdate({ _id: id }, {
          title,
          subject,
+         emailSendAt : dateTime
     } , {
       new: true,
     });
@@ -76,7 +130,6 @@ export const updateNote = async (req, res) => {
     });
   }
 };
-
 
 export const addNote = async (req, res) => {
   try {
